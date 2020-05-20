@@ -4,18 +4,27 @@ MAXELEM="200000"
 BLOCKLIST="/tmp/firehol.txt"
 
 # Download blocklists
-curl -k https://iplists.firehol.org/files/firehol_level1.netset >"$BLOCKLIST"
-curl -k https://iplists.firehol.org/files/firehol_level2.netset >>"$BLOCKLIST"
-curl -k https://iplists.firehol.org/files/firehol_level3.netset >>"$BLOCKLIST"
+curl -k https://raw.githubusercontent.com/firehol/blocklist-ipsets/master/firehol_level1.netset >"$BLOCKLIST"
+curl -k https://raw.githubusercontent.com/firehol/blocklist-ipsets/master/firehol_level2.netset >>"$BLOCKLIST"
+curl -k https://raw.githubusercontent.com/firehol/blocklist-ipsets/master/firehol_level3.netset >>"$BLOCKLIST"
 curl -k https://raw.githubusercontent.com/firehol/blocklist-ipsets/master/firehol_abusers_1d.netset >>"$BLOCKLIST"
 curl -k https://raw.githubusercontent.com/firehol/blocklist-ipsets/master/blocklist_de.ipset >>"$BLOCKLIST"
 curl -k https://raw.githubusercontent.com/firehol/blocklist-ipsets/master/dshield_top_1000.ipset >>"$BLOCKLIST"
 curl -k https://raw.githubusercontent.com/firehol/blocklist-ipsets/master/nullsecure.ipset >>"$BLOCKLIST"
+curl -k https://raw.githubusercontent.com/firehol/blocklist-ipsets/master/bi_any_0_1d.ipset >>"$BLOCKLIST"
+curl -k https://raw.githubusercontent.com/firehol/blocklist-ipsets/master/malwaredomainlist.ipset >>"$BLOCKLIST"
+curl -k https://raw.githubusercontent.com/firehol/blocklist-ipsets/master/dshield.netset >>"$BLOCKLIST"
+curl -k https://raw.githubusercontent.com/firehol/blocklist-ipsets/master/blocklist_net_ua.ipset >>"$BLOCKLIST"
 
 sync && sleep 2
 
-# Cleanup and remove conflicting Bogon IPs (Don't log yourself out ;) )
+# Remove everything starting with punctation
 sed -i '/^[[:punct:]]/ d' "$BLOCKLIST"
+
+# IPv4 addresses only
+sed -i -n '/\([0-9]\{1,3\}\.\)\{3\}[0-9]\{1,3\}/p' "$BLOCKLIST"
+
+# Remove Bogon IPs
 sed -i '/127.0.0./d' "$BLOCKLIST"
 sed -i '/0.0.0./d' "$BLOCKLIST"
 sed -i '/10.0.0./d' "$BLOCKLIST"
