@@ -14,7 +14,7 @@ curl -k https://raw.githubusercontent.com/firehol/blocklist-ipsets/master/nullse
 
 sync && sleep 2
 
-# Cleanup and remove conflicting Bogon IPs
+# Cleanup and remove conflicting Bogon IPs (Don't log yourself out ;) )
 sed -i '/^[[:punct:]]/ d' "$BLOCKLIST"
 sed -i '/127.0.0./d' "$BLOCKLIST"
 sed -i '/0.0.0./d' "$BLOCKLIST"
