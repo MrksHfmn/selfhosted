@@ -1,2 +1,2 @@
 # selfhosted
-Scripts and files for selfhosted services
+Scripts and files for selfhosted services!
